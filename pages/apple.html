@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple - Техно Маркет</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Техно Маркет</div>
+            <ul class="nav-links">
+                <li><a href="../index.html">Главная</a></li>
+                <li><a href="apple.html" class="active">Apple</a></li>
+                <li><a href="xiaomi.html">Xiaomi</a></li>
+                <li><a href="google.html">Google</a></li>
+            </ul>
+            <div class="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="category-header">
+            <h1>Apple</h1>
+            <p>Оригинальные устройства Apple с гарантией</p>
+        </section>
+
+        <section class="products-section">
+            <div class="filter-bar">
+                <select id="sort-products">
+                    <option value="default">Сортировка</option>
+                    <option value="price-asc">По возрастанию цены</option>
+                    <option value="price-desc">По убыванию цены</option>
+                    <option value="name">По названию</option>
+                </select>
+            </div>
+            <div class="products-grid" id="apple-products">
+                <!-- Товары загружаются через JS -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Техно Маркет. Все права защищены.</p>
+        <p>Связь: @techno_market_bot</p>
+    </footer>
+
+    <script src="../js/db.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
