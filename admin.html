@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель - Техно Маркет</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <div class="login-form" id="login-form">
+            <h2>Вход в админ-панель</h2>
+            <input type="password" id="admin-password" placeholder="Введите пароль">
+            <button onclick="checkAdminPassword()">Войти</button>
+            <p id="login-error" style="color:red;display:none;">Неверный пароль</p>
+        </div>
+
+        <div class="admin-panel" id="admin-panel" style="display:none;">
+            <header class="admin-header">
+                <h1>Админ-панель</h1>
+                <button onclick="logout()">Выйти</button>
+            </header>
+
+            <div class="admin-content">
+                <aside class="admin-sidebar">
+                    <button class="active" onclick="showTab('categories')">Категории</button>
+                    <button onclick="showTab('products')">Товары</button>
+                </aside>
+
+                <main class="admin-main">
+                    <!-- Категории -->
+                    <div id="categories-tab" class="admin-tab">
+                        <h2>Управление категориями</h2>
+                        <div class="add-form">
+                            <input type="text" id="new-category-name" placeholder="Название категории">
+                            <input type="text" id="new-category-icon" placeholder="Иконка (эмодзи)">
+                            <button onclick="addCategory()">Добавить категорию</button>
+                        </div>
+                        <div id="categories-list"></div>
+                    </div>
+
+                    <!-- Товары -->
+                    <div id="products-tab" class="admin-tab" style="display:none;">
+                        <h2>Управление товарами</h2>
+                        <div class="add-form">
+                            <select id="product-category"></select>
+                            <input type="text" id="product-name" placeholder="Название товара">
+                            <input type="number" id="product-price" placeholder="Цена">
+                            <input type="text" id="product-specs" placeholder="Характеристики (через запятую)">
+                            <input type="file" id="product-image" accept="image/*">
+                            <button onclick="addProduct()">Добавить товар</button>
+                        </div>
+                        <div id="products-list"></div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/db.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
