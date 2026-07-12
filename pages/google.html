@@ -50,6 +50,27 @@
         <p>Связь: @techno_market_bot</p>
     </footer>
 
+    <!-- Модальное окно -->
+    <div class="modal-overlay" id="product-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div class="modal-grid">
+                <div class="modal-image">
+                    <img id="modal-image" src="" alt="">
+                </div>
+                <div class="modal-details">
+                    <span class="category-badge" id="modal-category"></span>
+                    <h2 id="modal-name"></h2>
+                    <div class="modal-price" id="modal-price"></div>
+                    <div class="modal-specs" id="modal-specs"></div>
+                    <div class="modal-actions">
+                        <button class="btn-buy" onclick="closeModal()">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="../js/db.js"></script>
     <script src="../js/main.js"></script>
 </body>
