@@ -1,4 +1,3 @@
-// Пароль для входа (можно изменить)
 const ADMIN_PASSWORD = 'admin123';
 
 function checkAdminPassword() {
@@ -22,15 +21,12 @@ function logout() {
 }
 
 function showTab(tab) {
-    // Скрываем все табы
     document.querySelectorAll('.admin-tab').forEach(t => t.style.display = 'none');
     document.querySelectorAll('.admin-sidebar button').forEach(b => b.classList.remove('active'));
     
-    // Показываем нужный таб
     document.getElementById(`${tab}-tab`).style.display = 'block';
     document.querySelector(`.admin-sidebar button[onclick="showTab('${tab}')"]`).classList.add('active');
     
-    // Загружаем данные
     if (tab === 'categories') loadCategories();
     if (tab === 'products') loadProductsAdmin();
 }
@@ -41,7 +37,6 @@ function loadAdminData() {
     loadCategorySelect();
 }
 
-// === Управление категориями ===
 function loadCategories() {
     const container = document.getElementById('categories-list');
     const categories = DB.getCategories();
@@ -74,7 +69,6 @@ function addCategory() {
         return;
     }
     
-    // Проверяем, существует ли категория
     const categories = DB.getCategories();
     if (categories.some(c => c.name.toLowerCase() === name.toLowerCase())) {
         alert('Категория с таким названием уже существует');
@@ -103,7 +97,6 @@ function editCategory(id) {
     
     const newName = prompt('Введите новое название:', category.name);
     if (newName && newName.trim()) {
-        // Обновляем название категории в товарах
         const data = DB.getData();
         data.products.forEach(p => {
             if (p.category === category.name) {
@@ -118,7 +111,6 @@ function editCategory(id) {
     }
 }
 
-// === Управление товарами ===
 function loadCategorySelect() {
     const select = document.getElementById('product-category');
     if (!select) return;
@@ -148,7 +140,7 @@ function loadProductsAdmin() {
         const div = document.createElement('div');
         div.className = 'product-item';
         div.innerHTML = `
-            <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x300/ccc/fff?text=No+Image'">
+            <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22%3E%3Crect width=%2260%22 height=%2260%22 fill=%22%23f5f5f7%22/%3E%3Ctext x=%2230%22 y=%2230%22 font-family=%22Arial%22 font-size=%2210%22 fill=%22%2386868b%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENo%20Image%3C/text%3E%3C/svg%3E'">
             <div class="product-info">
                 <strong>${product.name}</strong><br>
                 <span style="color:#007aff;font-weight:bold;">${product.price.toLocaleString()} ₽</span><br>
@@ -184,9 +176,8 @@ function addProduct() {
         return;
     }
     
-    let image = 'https://via.placeholder.com/300x300/ccc/fff?text=No+Image';
+    let image = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300"%3E%3Crect width="300" height="300" fill="%23f5f5f7"/%3E%3Ctext x="150" y="150" font-family="Arial" font-size="16" fill="%2386868b" text-anchor="middle" dy=".3em"%3ENo Image%3C/text%3E%3C/svg%3E';
     
-    // Если есть загруженное изображение
     if (fileInput.files && fileInput.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -202,7 +193,6 @@ function addProduct() {
 function saveProduct(category, name, price, specs, image) {
     DB.addProduct(name, price, specs, category, image);
     
-    // Очищаем форму
     document.getElementById('product-name').value = '';
     document.getElementById('product-price').value = '';
     document.getElementById('product-specs').value = '';
@@ -241,7 +231,6 @@ function editProduct(id) {
     }
 }
 
-// Вход по Enter
 document.addEventListener('DOMContentLoaded', function() {
     const passwordInput = document.getElementById('admin-password');
     if (passwordInput) {
