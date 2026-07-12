@@ -61,6 +61,23 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+
+    // Закрытие модального окна по клику вне его
+    const modal = document.getElementById('product-modal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Закрытие по Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+    }
 });
 
 function loadProducts(category) {
@@ -86,7 +103,7 @@ function loadFeaturedProducts() {
     if (!container) return;
 
     const products = DB.getProducts();
-    const featured = products.slice(0, 6); // Показываем первые 6 товаров
+    const featured = products.slice(0, 6);
 
     container.innerHTML = '';
 
@@ -101,9 +118,16 @@ function createProductCard(product) {
     card.className = 'product-card';
     card.dataset.price = product.price;
     card.dataset.name = product.name;
+    card.dataset.productId = product.id;
+
+    // Используем прокси для корректной загрузки изображений
+    let imageUrl = product.image;
+    if (!imageUrl || imageUrl === 'https://via.placeholder.com/300x300/ccc/fff?text=No+Image') {
+        imageUrl = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300"%3E%3Crect width="300" height="300" fill="%23f5f5f7"/%3E%3Ctext x="150" y="150" font-family="Arial" font-size="16" fill="%2386868b" text-anchor="middle" dy=".3em"%3ENo Image%3C/text%3E%3C/svg%3E';
+    }
 
     card.innerHTML = `
-        <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x300/ccc/fff?text=No+Image'">
+        <img src="${imageUrl}" alt="${product.name}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect width=%22300%22 height=%22300%22 fill=%22%23f5f5f7%22/%3E%3Ctext x=%22150%22 y=%22150%22 font-family=%22Arial%22 font-size=%2216%22 fill=%22%2386868b%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENo Image%3C/text%3E%3C/svg%3E'">
         <div class="product-info">
             <h3>${product.name}</h3>
             <div class="price">${product.price.toLocaleString()} ₽</div>
@@ -112,5 +136,55 @@ function createProductCard(product) {
         </div>
     `;
 
+    // Открытие модального окна при клике
+    card.addEventListener('click', function() {
+        openProductModal(product.id);
+    });
+
     return card;
+}
+
+function openProductModal(productId) {
+    const product = DB.getProductById(productId);
+    if (!product) return;
+
+    const modal = document.getElementById('product-modal');
+    if (!modal) return;
+
+    // Заполняем модальное окно
+    let imageUrl = product.image;
+    if (!imageUrl || imageUrl === 'https://via.placeholder.com/300x300/ccc/fff?text=No+Image') {
+        imageUrl = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect width="400" height="400" fill="%23f5f5f7"/%3E%3Ctext x="200" y="200" font-family="Arial" font-size="20" fill="%2386868b" text-anchor="middle" dy=".3em"%3ENo Image%3C/text%3E%3C/svg%3E';
+    }
+
+    document.getElementById('modal-image').src = imageUrl;
+    document.getElementById('modal-image').alt = product.name;
+    document.getElementById('modal-category').textContent = product.category;
+    document.getElementById('modal-name').textContent = product.name;
+    document.getElementById('modal-price').textContent = `${product.price.toLocaleString()} ₽`;
+    
+    // Разбиваем характеристики
+    const specsContainer = document.getElementById('modal-specs');
+    specsContainer.innerHTML = '';
+    const specsList = product.specs.split(',').map(s => s.trim());
+    specsList.forEach(spec => {
+        if (spec) {
+            const item = document.createElement('div');
+            item.className = 'modal-specs-item';
+            item.textContent = spec;
+            specsContainer.appendChild(item);
+        }
+    });
+
+    // Показываем модальное окно
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    const modal = document.getElementById('product-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
 }
