@@ -1,190 +1,91 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Мобильное меню
-    const burger = document.querySelector('.burger');
-    const navLinks = document.querySelector('.nav-links');
-    
-    if (burger) {
-        burger.addEventListener('click', function() {
-            navLinks.classList.toggle('active');
-        });
-    }
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Техно Маркет - Apple, Xiaomi, Google</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Техно Маркет</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Главная</a></li>
+                <li><a href="pages/apple.html">Apple</a></li>
+                <li><a href="pages/xiaomi.html">Xiaomi</a></li>
+                <li><a href="pages/google.html">Google</a></li>
+            </ul>
+            <div class="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
 
-    // Определяем текущую страницу
-    const currentPage = window.location.pathname;
-    let category = '';
-    
-    if (currentPage.includes('apple.html')) category = 'Apple';
-    else if (currentPage.includes('xiaomi.html')) category = 'Xiaomi';
-    else if (currentPage.includes('google.html')) category = 'Google';
+    <main>
+        <section class="hero">
+            <h1>Лучшая техника от мировых брендов</h1>
+            <p>Apple, Xiaomi, Google - только оригинальная продукция</p>
+        </section>
 
-    // Загружаем товары для страницы
-    if (category) {
-        loadProducts(category);
-    } else {
-        // Главная страница - показываем популярные товары
-        loadFeaturedProducts();
-    }
+        <section class="categories">
+            <div class="category-card">
+                <img src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-max-finish-select-202309-6-7inch-natural?wid=5120&hei=2880&fmt=webp&qlt=70&.v=1693529963578" alt="Apple">
+                <h2>Apple</h2>
+                <p>iPhone, MacBook, iPad и другие устройства</p>
+                <a href="pages/apple.html" class="btn">Перейти</a>
+            </div>
+            <div class="category-card">
+                <img src="https://i01.appmifile.com/webfile/globalimg/products/pc/xiaomi14pro/hero.png" alt="Xiaomi">
+                <h2>Xiaomi</h2>
+                <p>Смартфоны, умный дом, аксессуары</p>
+                <a href="pages/xiaomi.html" class="btn">Перейти</a>
+            </div>
+            <div class="category-card">
+                <img src="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Pixel_8_Pro_Bay_1.max-1000x1000.png" alt="Google">
+                <h2>Google</h2>
+                <p>Pixel, Nest, Chromecast и другие</p>
+                <a href="pages/google.html" class="btn">Перейти</a>
+            </div>
+        </section>
 
-    // Сортировка
-    const sortSelect = document.getElementById('sort-products');
-    if (sortSelect) {
-        sortSelect.addEventListener('change', function() {
-            const productsContainer = document.querySelector('.products-grid');
-            const products = Array.from(productsContainer.children);
-            
-            switch(this.value) {
-                case 'price-asc':
-                    products.sort((a, b) => {
-                        const priceA = parseFloat(a.dataset.price);
-                        const priceB = parseFloat(b.dataset.price);
-                        return priceA - priceB;
-                    });
-                    break;
-                case 'price-desc':
-                    products.sort((a, b) => {
-                        const priceA = parseFloat(a.dataset.price);
-                        const priceB = parseFloat(b.dataset.price);
-                        return priceB - priceA;
-                    });
-                    break;
-                case 'name':
-                    products.sort((a, b) => {
-                        return a.dataset.name.localeCompare(b.dataset.name);
-                    });
-                    break;
-                default:
-                    return;
-            }
-            
-            products.forEach(product => {
-                productsContainer.appendChild(product);
-            });
-        });
-    }
+        <section class="featured">
+            <h2>Популярные товары</h2>
+            <div class="products-grid" id="featured-products">
+                <!-- Товары загружаются через JS -->
+            </div>
+        </section>
+    </main>
 
-    // Закрытие модального окна по клику вне его
-    const modal = document.getElementById('product-modal');
-    if (modal) {
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
+    <footer>
+        <p>&copy; 2026 Техно Маркет. Все права защищены.</p>
+        <p>Связь: @techno_market_bot</p>
+    </footer>
 
-        // Закрытие по Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && modal.classList.contains('active')) {
-                closeModal();
-            }
-        });
-    }
-});
-
-function loadProducts(category) {
-    const container = document.getElementById(`${category.toLowerCase()}-products`);
-    if (!container) return;
-
-    const products = DB.getProductsByCategory(category);
-    container.innerHTML = '';
-
-    if (products.length === 0) {
-        container.innerHTML = '<p class="no-products">Товаров в этой категории пока нет</p>';
-        return;
-    }
-
-    products.forEach(product => {
-        const card = createProductCard(product);
-        container.appendChild(card);
-    });
-}
-
-function loadFeaturedProducts() {
-    const container = document.getElementById('featured-products');
-    if (!container) return;
-
-    const products = DB.getProducts();
-    const featured = products.slice(0, 6);
-
-    container.innerHTML = '';
-
-    featured.forEach(product => {
-        const card = createProductCard(product);
-        container.appendChild(card);
-    });
-}
-
-function createProductCard(product) {
-    const card = document.createElement('div');
-    card.className = 'product-card';
-    card.dataset.price = product.price;
-    card.dataset.name = product.name;
-    card.dataset.productId = product.id;
-
-    // Используем прокси для корректной загрузки изображений
-    let imageUrl = product.image;
-    if (!imageUrl || imageUrl === 'https://via.placeholder.com/300x300/ccc/fff?text=No+Image') {
-        imageUrl = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300"%3E%3Crect width="300" height="300" fill="%23f5f5f7"/%3E%3Ctext x="150" y="150" font-family="Arial" font-size="16" fill="%2386868b" text-anchor="middle" dy=".3em"%3ENo Image%3C/text%3E%3C/svg%3E';
-    }
-
-    card.innerHTML = `
-        <img src="${imageUrl}" alt="${product.name}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect width=%22300%22 height=%22300%22 fill=%22%23f5f5f7%22/%3E%3Ctext x=%22150%22 y=%22150%22 font-family=%22Arial%22 font-size=%2216%22 fill=%22%2386868b%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENo Image%3C/text%3E%3C/svg%3E'">
-        <div class="product-info">
-            <h3>${product.name}</h3>
-            <div class="price">${product.price.toLocaleString()} ₽</div>
-            <div class="specs">${product.specs}</div>
-            <span class="category-tag">${product.category}</span>
+    <!-- Модальное окно -->
+    <div class="modal-overlay" id="product-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div class="modal-grid">
+                <div class="modal-image">
+                    <img id="modal-image" src="" alt="">
+                </div>
+                <div class="modal-details">
+                    <span class="category-badge" id="modal-category"></span>
+                    <h2 id="modal-name"></h2>
+                    <div class="modal-price" id="modal-price"></div>
+                    <div class="modal-specs" id="modal-specs"></div>
+                    <div class="modal-actions">
+                        <button class="btn-buy" onclick="closeModal()">Закрыть</button>
+                    </div>
+                </div>
+            </div>
         </div>
-    `;
+    </div>
 
-    // Открытие модального окна при клике
-    card.addEventListener('click', function() {
-        openProductModal(product.id);
-    });
-
-    return card;
-}
-
-function openProductModal(productId) {
-    const product = DB.getProductById(productId);
-    if (!product) return;
-
-    const modal = document.getElementById('product-modal');
-    if (!modal) return;
-
-    // Заполняем модальное окно
-    let imageUrl = product.image;
-    if (!imageUrl || imageUrl === 'https://via.placeholder.com/300x300/ccc/fff?text=No+Image') {
-        imageUrl = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect width="400" height="400" fill="%23f5f5f7"/%3E%3Ctext x="200" y="200" font-family="Arial" font-size="20" fill="%2386868b" text-anchor="middle" dy=".3em"%3ENo Image%3C/text%3E%3C/svg%3E';
-    }
-
-    document.getElementById('modal-image').src = imageUrl;
-    document.getElementById('modal-image').alt = product.name;
-    document.getElementById('modal-category').textContent = product.category;
-    document.getElementById('modal-name').textContent = product.name;
-    document.getElementById('modal-price').textContent = `${product.price.toLocaleString()} ₽`;
-    
-    // Разбиваем характеристики
-    const specsContainer = document.getElementById('modal-specs');
-    specsContainer.innerHTML = '';
-    const specsList = product.specs.split(',').map(s => s.trim());
-    specsList.forEach(spec => {
-        if (spec) {
-            const item = document.createElement('div');
-            item.className = 'modal-specs-item';
-            item.textContent = spec;
-            specsContainer.appendChild(item);
-        }
-    });
-
-    // Показываем модальное окно
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-    const modal = document.getElementById('product-modal');
-    if (modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-}
+    <script src="js/db.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
