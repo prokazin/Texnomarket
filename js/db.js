@@ -20,7 +20,7 @@ const DB = {
                 { id: 3, name: 'Google', icon: '🔍' }
             ],
             products: [
-                // APPLE - 10 товаров с реальными фото
+                // APPLE - 10 товаров
                 { 
                     id: 1, 
                     name: 'iPhone 15 Pro Max', 
@@ -102,7 +102,7 @@ const DB = {
                     image: 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/airpods-max-select-202011?wid=2560&hei=1440&fmt=webp&qlt=70&.v=1604021848000'
                 },
 
-                // XIAOMI - 8 товаров с реальными фото
+                // XIAOMI - 8 товаров
                 { 
                     id: 11, 
                     name: 'Xiaomi 14 Pro', 
@@ -168,7 +168,7 @@ const DB = {
                     image: 'https://i01.appmifile.com/webfile/globalimg/products/pc/xiaomi-robot-vacuum-s10/hero.png'
                 },
 
-                // GOOGLE - 7 товаров с реальными фото
+                // GOOGLE - 7 товаров
                 { 
                     id: 19, 
                     name: 'Google Pixel 8 Pro', 
@@ -271,7 +271,7 @@ const DB = {
             price: parseFloat(price),
             specs: specs,
             category: category,
-            image: image || 'https://via.placeholder.com/300x300/ccc/fff?text=No+Image'
+            image: image || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300"%3E%3Crect width="300" height="300" fill="%23f5f5f7"/%3E%3Ctext x="150" y="150" font-family="Arial" font-size="16" fill="%2386868b" text-anchor="middle" dy=".3em"%3ENo Image%3C/text%3E%3C/svg%3E'
         };
         data.products.push(newProduct);
         this.saveData(data);
