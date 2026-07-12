@@ -15,7 +15,6 @@ body {
     padding: 2rem;
 }
 
-/* Login */
 .login-form {
     max-width: 400px;
     margin: 5rem auto;
@@ -54,7 +53,6 @@ body {
     background: #005bb5;
 }
 
-/* Admin Panel */
 .admin-panel {
     background: white;
     border-radius: 16px;
@@ -157,7 +155,6 @@ body {
     background: #28a745;
 }
 
-/* Lists */
 .category-item,
 .product-item {
     background: #f8f9fa;
@@ -193,7 +190,6 @@ body {
     background: #d63031;
 }
 
-/* Product in admin */
 .product-item {
     flex-wrap: wrap;
 }
@@ -211,7 +207,6 @@ body {
     margin-right: 1rem;
 }
 
-/* Responsive admin */
 @media (max-width: 768px) {
     .admin-content {
         flex-direction: column;
